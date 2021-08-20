@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 export type Itodo = {
   id: number;
   text: string;
+  date: string;
   done: boolean;
 };
 

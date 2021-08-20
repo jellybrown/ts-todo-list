@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { PlusCircleOutlined } from "@ant-design/icons";
+import { Moment } from "moment";
+import { DatePicker, Space } from "antd";
+import locale from "antd/es/date-picker/locale/ko_KR";
 import { Itodo } from "components/todo/TodoService";
 
 const CircleButton = styled.button<{ open: boolean }>`
@@ -58,14 +61,23 @@ interface TodoCreateProps {
 const TodoCreate = ({
   nextId,
   createTodo,
-  incrementNextId
+  incrementNextId,
 }: TodoCreateProps) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
+  const [momentDate, setMomentDate] = useState<Moment | null>(null);
+  const [date, setDate] = useState("");
 
   const handleToggle = () => setOpen(!open);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue(e.target.value);
+
+  const handlePickDate = (e: Moment | null) => {
+    if (!e) return;
+    setMomentDate(e);
+    setDate(e.format("MM월 YY일"));
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // 새로고침 방지
@@ -73,12 +85,20 @@ const TodoCreate = ({
     createTodo({
       id: nextId,
       text: value,
-      done: false
+      date,
+      done: false,
     });
     incrementNextId(); // nextId 하나 증가
 
     setValue(""); // input 초기화
+    setMomentDate(null);
+    setDate("");
     setOpen(false); // open 닫기
+  };
+
+  const disabledDate = (current: any) => {
+    const oneDay = 1000 * 60 * 60 * 24;
+    return current.valueOf() < Date.now() - oneDay;
   };
 
   return (
@@ -91,7 +111,15 @@ const TodoCreate = ({
             onChange={handleChange}
             value={value}
           />
-
+          <Space direction="horizontal">
+            <DatePicker
+              value={momentDate}
+              locale={locale}
+              disabledDate={disabledDate}
+              onChange={(e: Moment | null) => handlePickDate(e)}
+              placeholder="목표일"
+            />
+          </Space>
           <CircleButton onClick={handleToggle} open={open}>
             <PlusCircleOutlined />
           </CircleButton>

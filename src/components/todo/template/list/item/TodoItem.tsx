@@ -42,7 +42,7 @@ const CheckCircle = styled.div<{ done: boolean }>`
     `}
 `;
 
-const Text = styled.div<{ done: boolean }>`
+const TextBox = styled.div<{ done: boolean }>`
   flex: 1;
   font-size: 16px;
   color: #119955;
@@ -52,6 +52,17 @@ const Text = styled.div<{ done: boolean }>`
       color: #ced4da;
       text-decoration: line-through;
     `}
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+`;
+
+const Text = styled.span``;
+
+const DateText = styled.span`
+  font-size: 13px;
+  margin-right: 15px;
 `;
 
 interface TodoItemProps {
@@ -73,7 +84,10 @@ const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
       <CheckCircle done={todo.done} onClick={handleToggle}>
         {todo.done && <CheckOutlined />}
       </CheckCircle>
-      <Text done={todo.done}>{todo.text}</Text>
+      <TextBox done={todo.done}>
+        <Text>{todo.text}</Text>
+        <DateText>{todo.date}</DateText>
+      </TextBox>
       <Remove onClick={handleRemove}>
         <DeleteOutlined />
       </Remove>
