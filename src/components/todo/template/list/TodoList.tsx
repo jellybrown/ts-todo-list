@@ -1,5 +1,5 @@
 import { Itodo } from "components/todo/TodoService";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import TodoItem from "./item/TodoItem";
 
@@ -23,6 +23,13 @@ const TodoList = ({
   editTodo,
   todos,
 }: TodoListProps) => {
+  const [openedPickerId, setOpenedPickerId] = useState<number | null>(null);
+
+  const handleClickPicker = (id: number | null) => {
+    if (openedPickerId === id) setOpenedPickerId(null);
+    else setOpenedPickerId(id);
+  };
+
   return (
     <TodoListBlock>
       {todos &&
@@ -31,6 +38,8 @@ const TodoList = ({
             toggleTodo={toggleTodo}
             removeTodo={removeTodo}
             editTodo={editTodo}
+            openedPickerId={openedPickerId}
+            handleClickPicker={handleClickPicker}
             key={todo.id}
             todo={todo}
           />

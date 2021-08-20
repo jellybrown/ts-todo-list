@@ -1,5 +1,9 @@
 import { CheckOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Itodo } from "components/todo/TodoService";
+import useDatePicker from "hooks/useDatePicker";
+import { DatePicker } from "antd";
+import locale from "antd/es/date-picker/locale/ko_KR";
+import { Moment } from "moment";
 import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 
@@ -42,7 +46,7 @@ const CheckCircle = styled.div<{ done: boolean }>`
     `}
 `;
 
-const TextBox = styled.div<{ done: boolean }>`
+const Content = styled.div<{ done: boolean }>`
   flex: 1;
   font-size: 16px;
   color: #119955;
@@ -55,7 +59,6 @@ const TextBox = styled.div<{ done: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: relative;
 `;
 
 const EditInput = styled.input`
@@ -76,15 +79,36 @@ const EditInput = styled.input`
 
 const Text = styled.span``;
 
-const DateText = styled.span`
+const DateText = styled.span<{ onClick: any }>`
+  position: relative;
   font-size: 13px;
-  margin-right: 15px;
+  margin-right: 7px;
+  z-index: 3;
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #fff;
+`;
+
+const PickerWrap = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 5px;
+`;
+
+const TextWrap = styled.div`
+  position: relative;
+`;
+
+const DateWrap = styled.div`
+  position: relative;
 `;
 
 interface TodoItemProps {
   toggleTodo: (id: number) => void;
   removeTodo: (id: number) => void;
   editTodo: (editedTodo: Itodo) => void;
+  openedPickerId: number | null;
+  handleClickPicker: (id: number | null) => void;
   todo: Itodo;
 }
 
@@ -92,9 +116,13 @@ const TodoItem = ({
   toggleTodo,
   removeTodo,
   editTodo,
+  openedPickerId,
+  handleClickPicker,
   todo,
 }: TodoItemProps) => {
   const [todoText, setTodoText] = useState(todo.text);
+  const { momentDate, setMomentDate, date, disabledDate, handlePickDate } =
+    useDatePicker();
 
   const handleToggle = () => {
     toggleTodo(todo.id);
@@ -109,8 +137,14 @@ const TodoItem = ({
     setTodoText(e.target.value);
   };
 
+  const handleEditDate = (e: Moment | null) => {
+    console.log("handleEditDate");
+    handlePickDate(e);
+    handleClickPicker(null);
+  };
+
   useEffect(() => {
-    if (todo.done === true) return;
+    if (todoText === todo.text) return;
 
     editTodo({
       id: todo.id,
@@ -120,20 +154,47 @@ const TodoItem = ({
     });
   }, [todoText]);
 
+  useEffect(() => {
+    if (date === "") return;
+
+    editTodo({
+      id: todo.id,
+      text: todoText,
+      date: date,
+      done: false,
+    });
+  }, [date]);
+
   return (
     <TodoItemBlock>
       <CheckCircle done={todo.done} onClick={handleToggle}>
         {todo.done && <CheckOutlined />}
       </CheckCircle>
-      <TextBox done={todo.done}>
-        <EditInput
-          disabled={todo.done}
-          defaultValue={todoText}
-          onChange={(e) => handleChangeInput(e)}
-        />
-        <Text>{todo.text}</Text>
-        <DateText>{todo.date}</DateText>
-      </TextBox>
+      <Content done={todo.done}>
+        <TextWrap>
+          <EditInput
+            disabled={todo.done}
+            defaultValue={todoText}
+            onChange={(e) => handleChangeInput(e)}
+          />
+          <Text>{todo.text}</Text>
+        </TextWrap>
+        <DateWrap>
+          <DateText onClick={() => handleClickPicker(todo.id)}>
+            {todo.date}
+          </DateText>
+          <PickerWrap>
+            <DatePicker
+              value={momentDate}
+              open={!todo.done && todo.id === openedPickerId}
+              locale={locale}
+              disabledDate={disabledDate}
+              onChange={(e: Moment | null) => handleEditDate(e)}
+              placeholder="목표일"
+            />
+          </PickerWrap>
+        </DateWrap>
+      </Content>
       <Remove onClick={handleRemove}>
         <DeleteOutlined />
       </Remove>

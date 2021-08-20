@@ -41,7 +41,6 @@ export const useTodo = () => {
   };
 
   const createTodo = (todo: Itodo) => {
-    console.log("creat", todo);
     const nextId = todoState.length + 1;
     setTodoState((prevState) =>
       prevState.concat({
@@ -50,9 +49,6 @@ export const useTodo = () => {
       })
     );
   };
-  useEffect(() => {
-    console.log("-->>", todoState);
-  }, [todoState]);
 
   const editTodo = (editedTodo: Itodo) => {
     setTodoState((prevState) =>
