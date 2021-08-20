@@ -1,6 +1,6 @@
 import { CheckOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Itodo } from "components/todo/TodoService";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 
 const Remove = styled.div`
@@ -58,6 +58,22 @@ const TextBox = styled.div<{ done: boolean }>`
   position: relative;
 `;
 
+const EditInput = styled.input`
+  margin: 0;
+  padding: 0;
+  border: none;
+  position: absolute;
+  left: 0;
+  outline: none;
+  opacity: 1;
+  visibility: visible;
+
+  &:disabled {
+    opacity: 0;
+    visibility: hidden;
+  }
+`;
+
 const Text = styled.span``;
 
 const DateText = styled.span`
@@ -68,16 +84,41 @@ const DateText = styled.span`
 interface TodoItemProps {
   toggleTodo: (id: number) => void;
   removeTodo: (id: number) => void;
+  editTodo: (editedTodo: Itodo) => void;
   todo: Itodo;
 }
 
-const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
+const TodoItem = ({
+  toggleTodo,
+  removeTodo,
+  editTodo,
+  todo,
+}: TodoItemProps) => {
+  const [todoText, setTodoText] = useState(todo.text);
+
   const handleToggle = () => {
     toggleTodo(todo.id);
   };
+
   const handleRemove = () => {
     removeTodo(todo.id);
   };
+
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (todo.done === true) return;
+    setTodoText(e.target.value);
+  };
+
+  useEffect(() => {
+    if (todo.done === true) return;
+
+    editTodo({
+      id: todo.id,
+      text: todoText,
+      date: todo.date,
+      done: false,
+    });
+  }, [todoText]);
 
   return (
     <TodoItemBlock>
@@ -85,6 +126,11 @@ const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
         {todo.done && <CheckOutlined />}
       </CheckCircle>
       <TextBox done={todo.done}>
+        <EditInput
+          disabled={todo.done}
+          defaultValue={todoText}
+          onChange={(e) => handleChangeInput(e)}
+        />
         <Text>{todo.text}</Text>
         <DateText>{todo.date}</DateText>
       </TextBox>

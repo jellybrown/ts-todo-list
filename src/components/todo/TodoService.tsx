@@ -41,11 +41,24 @@ export const useTodo = () => {
   };
 
   const createTodo = (todo: Itodo) => {
+    console.log("creat", todo);
     const nextId = todoState.length + 1;
     setTodoState((prevState) =>
       prevState.concat({
         ...todo,
         id: nextId,
+      })
+    );
+  };
+  useEffect(() => {
+    console.log("-->>", todoState);
+  }, [todoState]);
+
+  const editTodo = (editedTodo: Itodo) => {
+    setTodoState((prevState) =>
+      prevState.map((todo: Itodo) => {
+        if (todo.id === editedTodo.id) return { ...todo, ...editedTodo };
+        else return todo;
       })
     );
   };
@@ -71,5 +84,6 @@ export const useTodo = () => {
     toggleTodo,
     removeTodo,
     createTodo,
+    editTodo,
   };
 };
