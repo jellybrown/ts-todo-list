@@ -5,6 +5,7 @@ import { Moment } from "moment";
 import { DatePicker, Space } from "antd";
 import locale from "antd/es/date-picker/locale/ko_KR";
 import { Itodo } from "components/todo/TodoService";
+import { warning } from "utils/modal";
 
 const CircleButton = styled.button<{ open: boolean }>`
   background: #33bb77;
@@ -67,6 +68,7 @@ const TodoCreate = ({
   const [value, setValue] = useState("");
   const [momentDate, setMomentDate] = useState<Moment | null>(null);
   const [date, setDate] = useState("");
+  const [error, setError] = useState(true);
 
   const handleToggle = () => setOpen(!open);
 
@@ -79,9 +81,17 @@ const TodoCreate = ({
     setDate(e.format("MM월 YY일"));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // 새로고침 방지
+  useEffect(() => {
+    if (value.length < 1 || date.length < 1) setError(true);
+    else setError(false);
+  }, [value, date]);
 
+  const openWarning = () => {
+    if (value.length < 1) return warning("내용을 입력해주세요.");
+    if (!momentDate) return warning("목표 날짜를 입력해주세요.");
+  };
+
+  const submitTodo = () => {
     createTodo({
       id: nextId,
       text: value,
@@ -94,6 +104,13 @@ const TodoCreate = ({
     setMomentDate(null);
     setDate("");
     setOpen(false); // open 닫기
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // 새로고침 방지
+
+    if (error) openWarning();
+    else submitTodo();
   };
 
   const disabledDate = (current: any) => {
