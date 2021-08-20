@@ -1,6 +1,7 @@
 import useTime from "hooks/useTime";
 import React from "react";
 import styled from "styled-components";
+import { getStringByDate } from "utils/getStringByDate";
 
 const TodoHeadBlock = styled.div`
   display: flex;
@@ -13,12 +14,6 @@ const TodoHeadBlock = styled.div`
 `;
 
 const DateText = styled.div`
-  font-size: 26px;
-  color: #119955;
-  padding-left: 10px;
-`;
-
-const DayText = styled.div`
   font-size: 20px;
   color: #119955;
   padding-top: 5px;
@@ -31,16 +26,11 @@ const TimeText = styled.div`
 
 const TodoHead = () => {
   const [time] = useTime();
-  //@TODO 현재 시간을 표시해야합니다.
-  const dayString = "Tuesday";
-  const dateString = "July 20, 2021";
+  const dateString = getStringByDate(new Date());
 
   return (
     <TodoHeadBlock>
-      <DayText>
-        {dayString} {dateString}
-      </DayText>
-      {/* <DateText></DateText> */}
+      <DateText>{dateString}</DateText>
       <TimeText>{time}</TimeText>
     </TodoHeadBlock>
   );
