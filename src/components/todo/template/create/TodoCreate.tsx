@@ -6,6 +6,7 @@ import { DatePicker, Space } from "antd";
 import locale from "antd/es/date-picker/locale/ko_KR";
 import { Itodo } from "components/todo/TodoService";
 import { warning } from "utils/modal";
+import useDatePicker from "hooks/useDatePicker";
 
 const CircleButton = styled.button<{ open: boolean }>`
   background: #33bb77;
@@ -66,20 +67,20 @@ const TodoCreate = ({
 }: TodoCreateProps) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
-  const [momentDate, setMomentDate] = useState<Moment | null>(null);
-  const [date, setDate] = useState("");
   const [error, setError] = useState(true);
+  const {
+    momentDate,
+    setMomentDate,
+    date,
+    setDate,
+    disabledDate,
+    handlePickDate,
+  } = useDatePicker();
 
   const handleToggle = () => setOpen(!open);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue(e.target.value);
-
-  const handlePickDate = (e: Moment | null) => {
-    if (!e) return;
-    setMomentDate(e);
-    setDate(e.format("MM월 DD일"));
-  };
 
   useEffect(() => {
     if (value.length < 1 || date.length < 1) setError(true);
@@ -111,11 +112,6 @@ const TodoCreate = ({
 
     if (error) openWarning();
     else submitTodo();
-  };
-
-  const disabledDate = (current: any) => {
-    const oneDay = 1000 * 60 * 60 * 24;
-    return current.valueOf() < Date.now() - oneDay;
   };
 
   return (
