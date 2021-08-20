@@ -121,11 +121,11 @@ const TodoItem = ({
   todo,
 }: TodoItemProps) => {
   const [todoText, setTodoText] = useState(todo.text);
-  const { momentDate, setMomentDate, date, disabledDate, handlePickDate } =
-    useDatePicker();
+  const { momentDate, date, disabledDate, handlePickDate } = useDatePicker();
 
   const handleToggle = () => {
     toggleTodo(todo.id);
+    handleClickPicker(null);
   };
 
   const handleRemove = () => {

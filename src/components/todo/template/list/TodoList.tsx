@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import TodoItem from "./item/TodoItem";
 
-const TodoListBlock = styled.div`
+const TodoListBlock = styled.div<{ onClick: any }>`
   flex: 1;
   padding: 20px 32px;
   padding-bottom: 48px;
@@ -25,13 +25,18 @@ const TodoList = ({
 }: TodoListProps) => {
   const [openedPickerId, setOpenedPickerId] = useState<number | null>(null);
 
+  const closePicker = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.value) return;
+    setOpenedPickerId(null);
+  };
+
   const handleClickPicker = (id: number | null) => {
     if (openedPickerId === id) setOpenedPickerId(null);
     else setOpenedPickerId(id);
   };
 
   return (
-    <TodoListBlock>
+    <TodoListBlock onClick={closePicker}>
       {todos &&
         todos.map((todo) => (
           <TodoItem
