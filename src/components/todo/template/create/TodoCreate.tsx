@@ -78,7 +78,7 @@ const TodoCreate = ({
   const handlePickDate = (e: Moment | null) => {
     if (!e) return;
     setMomentDate(e);
-    setDate(e.format("MM월 YY일"));
+    setDate(e.format("MM월 DD일"));
   };
 
   useEffect(() => {
