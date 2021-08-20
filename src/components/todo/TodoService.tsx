@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export type Itodo = {
   id: number;
@@ -30,7 +30,7 @@ export const useTodo = () => {
 
   const removeTodo = (id: number) => {
     setTodoState((prevState) =>
-      prevState.filter((todo: Itodo) => todo.id === id)
+      prevState.filter((todo: Itodo) => todo.id !== id)
     );
   };
 
@@ -45,8 +45,8 @@ export const useTodo = () => {
   };
 
   const loadData = () => {
-    let data = localStorage.getItem('todos');
-    if (data === undefined) data = '';
+    let data = localStorage.getItem("todos");
+    if (data === undefined) data = "";
     initialTodos = data && JSON.parse(data);
     if (initialTodos && initialTodos.length >= 1) {
       incrementNextId();
@@ -55,7 +55,7 @@ export const useTodo = () => {
   };
 
   const saveData = () => {
-    localStorage.setItem('todos', JSON.stringify(todoState));
+    localStorage.setItem("todos", JSON.stringify(todoState));
   };
 
   return {
