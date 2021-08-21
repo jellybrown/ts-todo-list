@@ -13,9 +13,6 @@ let initialTodos: Itodo[] = [];
 export const useTodo = () => {
   const [todoState, setTodoState] = useState(initialTodos);
   var nextIdState = 0;
-  useEffect(() => {
-    console.log("todoState", todoState);
-  }, [todoState]);
 
   useEffect(() => {
     loadData();
@@ -45,17 +42,18 @@ export const useTodo = () => {
   };
 
   const createTodo = (todo: Itodo) => {
-    const nextId = todoState.length + 1;
-    setTodoState((prevState) =>
-      prevState.concat({
-        ...todo,
-        id: nextId,
-      })
-    );
+    const nextId = todoState ? todoState.length + 1 : 1;
+    setTodoState((prevState) => {
+      if (!prevState) return [{ ...todo }];
+      else
+        return prevState.concat({
+          ...todo,
+          id: nextId,
+        });
+    });
   };
 
   const editTodo = (editedTodo: Itodo) => {
-    console.log("edited-->", editedTodo);
     setTodoState((prevState) =>
       prevState.map((todo: Itodo) => {
         if (todo.id === editedTodo.id) return { ...todo, ...editedTodo };

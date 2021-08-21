@@ -21,7 +21,7 @@ interface HooksTodoHeadProps {
 }
 
 const Todofooter = ({ todos }: HooksTodoHeadProps) => {
-  const undoneTasks = todos.filter((todo) => !todo.done);
+  const undoneTasks = todos && todos.filter((todo) => !todo.done);
 
   return (
     <TodoFooterBlock>
