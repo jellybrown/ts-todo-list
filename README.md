@@ -4,6 +4,8 @@
 
 typescript, react로 개발한 투두리스트 입니다.
 
+<br>
+
 ## 기능
 
 1. 할일, 목표일(date picker) 입력 기능
@@ -25,6 +27,8 @@ typescript, react로 개발한 투두리스트 입니다.
 ## 기술 과제 노션
 
 https://grand-haumea-b9b.notion.site/todo-list-ac5ed030882743feba7aa5eca4e3a4a1
+
+<br>
 
 ## 배포 주소
 
