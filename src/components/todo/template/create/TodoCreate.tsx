@@ -24,6 +24,7 @@ const CircleButton = styled.button<{ open: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 
 const InsertFormPositioner = styled.div`
@@ -42,6 +43,7 @@ const InsertForm = styled.form`
 
 const Input = styled.input`
   padding: 12px;
+  margin-right: 10px;
   border: 1px solid #dddddd;
   width: 100%;
   outline: none;
@@ -120,7 +122,7 @@ const TodoCreate = ({
         <InsertForm onSubmit={handleSubmit}>
           <Input
             autoFocus
-            placeholder="What's need to be done?"
+            placeholder="어떤 할 일이 있나요?"
             onChange={handleChange}
             value={value}
           />
