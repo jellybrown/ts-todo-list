@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { Moment } from "moment";
 
 export type Itodo = {
   id: number;
   text: string;
   date: string;
-  moment: Moment;
+  moment: number;
   done: boolean;
 };
 
@@ -14,6 +13,9 @@ let initialTodos: Itodo[] = [];
 export const useTodo = () => {
   const [todoState, setTodoState] = useState(initialTodos);
   var nextIdState = 0;
+  useEffect(() => {
+    console.log("todoState", todoState);
+  }, [todoState]);
 
   useEffect(() => {
     loadData();
@@ -53,6 +55,7 @@ export const useTodo = () => {
   };
 
   const editTodo = (editedTodo: Itodo) => {
+    console.log("edited-->", editedTodo);
     setTodoState((prevState) =>
       prevState.map((todo: Itodo) => {
         if (todo.id === editedTodo.id) return { ...todo, ...editedTodo };

@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { Moment } from "moment";
 
 const useDatePicker = () => {
-  const [momentDate, setMomentDate] = useState<Moment | null>(null);
+  const [momentDate, setMomentDate] = useState<number | null>(null);
   const [date, setDate] = useState("");
+  const [momentString, setMomentString] = useState<string>("");
 
   const disabledDate = (current: any) => {
     return current.valueOf() < Date.now() - ONE_DAY;
   };
 
-  const handlePickDate = (e: Moment | null) => {
-    if (!e) return;
-    setMomentDate(e);
+  const handlePickDate = (e: Moment | null, string: string) => {
+    if (!e || !string) return;
+    setMomentDate(e.toDate().getTime());
+    setMomentString(string);
     setDate(e.format("MM월 DD일"));
   };
 
@@ -20,6 +22,8 @@ const useDatePicker = () => {
     setMomentDate,
     date,
     setDate,
+    momentString,
+    setMomentString,
     disabledDate,
     handlePickDate,
   };

@@ -5,7 +5,7 @@ import { Itodo } from "components/todo/TodoService";
 import useDatePicker from "hooks/useDatePicker";
 import { DatePicker } from "antd";
 import locale from "antd/es/date-picker/locale/ko_KR";
-import { Moment } from "moment";
+import moment, { Moment } from "moment";
 import TodoDday from "../dday/TodoDday";
 
 const Remove = styled.div`
@@ -164,7 +164,8 @@ const TodoItem = ({
   const [inputWidth, setInputWidth] = useState<number | null>(
     getLength(todo.text) * CHAR_WIDTH
   );
-  const { momentDate, date, disabledDate, handlePickDate } = useDatePicker();
+  const { date, momentDate, momentString, disabledDate, handlePickDate } =
+    useDatePicker();
 
   const handleToggle = () => {
     toggleTodo(todo.id);
@@ -183,8 +184,8 @@ const TodoItem = ({
     setTodoText(e.target.value);
   };
 
-  const handleEditDate = (e: Moment | null) => {
-    handlePickDate(e);
+  const handleEditDate = (e: Moment | null, string: string) => {
+    handlePickDate(e, string);
     handleClickPicker(null);
   };
 
@@ -240,11 +241,13 @@ const TodoItem = ({
           </DateText>
           <PickerWrap>
             <DatePicker
-              value={momentDate}
+              value={momentString !== "" ? moment(momentString) : null}
               open={!todo.done && todo.id === openedPickerId}
               locale={locale}
               disabledDate={disabledDate}
-              onChange={(e: Moment | null) => handleEditDate(e)}
+              onChange={(e: Moment | null, string: string) =>
+                handleEditDate(e, string)
+              }
               placeholder="목표일"
             />
           </PickerWrap>

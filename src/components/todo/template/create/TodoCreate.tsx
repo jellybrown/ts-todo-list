@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { Moment } from "moment";
+import moment, { Moment } from "moment";
 import { DatePicker, Space } from "antd";
+import "moment/locale/ko";
 import locale from "antd/es/date-picker/locale/ko_KR";
 import { Itodo } from "components/todo/TodoService";
 import { warning } from "utils/modal";
@@ -75,6 +76,8 @@ const TodoCreate = ({
     setMomentDate,
     date,
     setDate,
+    momentString,
+    setMomentString,
     disabledDate,
     handlePickDate,
   } = useDatePicker();
@@ -109,6 +112,7 @@ const TodoCreate = ({
     setValue(""); // input 초기화
     setMomentDate(null);
     setDate("");
+    setMomentString("");
     setOpen(false); // open 닫기
   };
 
@@ -131,10 +135,12 @@ const TodoCreate = ({
           />
           <Space direction="horizontal">
             <DatePicker
-              value={momentDate}
+              value={momentString !== "" ? moment(momentString) : null}
               locale={locale}
               disabledDate={disabledDate}
-              onChange={(e: Moment | null) => handlePickDate(e)}
+              onChange={(e: Moment | null, string: string) =>
+                handlePickDate(e, string)
+              }
               placeholder="목표일"
             />
           </Space>

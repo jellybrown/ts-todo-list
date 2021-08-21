@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Moment } from "moment";
+import "moment/locale/ko";
 import { ONE_DAY } from "hooks/useDatePicker";
 
 interface DdayProps {
@@ -25,14 +26,19 @@ const Dday = styled.span<DdayProps>`
 interface TodoDdayProps {
   done: boolean;
   today: Date;
-  targetDay: Moment;
+  targetDay: number;
 }
 
 const TodoDday = ({ done, today, targetDay }: TodoDdayProps) => {
+  useEffect(() => {
+    console.log(today);
+    console.log(targetDay);
+  }, [today, targetDay]);
+
   const [dDay, setDday] = useState<null | number>(null);
 
   useEffect(() => {
-    const dayValue = targetDay.toDate().getTime() - today.getTime();
+    const dayValue = targetDay - today.getTime();
     const restDay = Math.abs(Math.ceil(dayValue / ONE_DAY));
 
     setDday(restDay);
