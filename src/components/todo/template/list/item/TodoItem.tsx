@@ -6,6 +6,7 @@ import useDatePicker from "hooks/useDatePicker";
 import { DatePicker } from "antd";
 import locale from "antd/es/date-picker/locale/ko_KR";
 import { Moment } from "moment";
+import TodoDday from "../dday/TodoDday";
 
 const Remove = styled.div`
   display: flex;
@@ -194,20 +195,22 @@ const TodoItem = ({
       id: todo.id,
       text: todoText,
       date: todo.date,
+      moment: todo.moment,
       done: false,
     });
   }, [todoText]);
 
   useEffect(() => {
-    if (date === "") return;
+    if (date === "" || !momentDate) return;
 
     editTodo({
       id: todo.id,
       text: todoText,
       date: date,
+      moment: momentDate,
       done: false,
     });
-  }, [date]);
+  }, [date, momentDate]);
 
   return (
     <TodoItemBlock>
@@ -227,6 +230,11 @@ const TodoItem = ({
           <Text>{todo.text}</Text>
         </TextWrap>
         <DateWrap>
+          <TodoDday
+            done={todo.done}
+            today={new Date()}
+            targetDay={momentDate || todo.moment}
+          />
           <DateText onClick={() => handleClickPicker(todo.id)}>
             {todo.date}
           </DateText>

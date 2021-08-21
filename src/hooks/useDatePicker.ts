@@ -6,8 +6,7 @@ const useDatePicker = () => {
   const [date, setDate] = useState("");
 
   const disabledDate = (current: any) => {
-    const oneDay = 1000 * 60 * 60 * 24;
-    return current.valueOf() < Date.now() - oneDay;
+    return current.valueOf() < Date.now() - ONE_DAY;
   };
 
   const handlePickDate = (e: Moment | null) => {
@@ -27,3 +26,5 @@ const useDatePicker = () => {
 };
 
 export default useDatePicker;
+
+export const ONE_DAY = 1000 * 60 * 60 * 24;

@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { Moment } from "moment";
 
 export type Itodo = {
   id: number;
   text: string;
   date: string;
+  moment: Moment;
   done: boolean;
 };
 

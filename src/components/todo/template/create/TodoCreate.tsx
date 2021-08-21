@@ -95,10 +95,13 @@ const TodoCreate = ({
   };
 
   const submitTodo = () => {
+    if (!momentDate) return;
+
     createTodo({
       id: nextId,
       text: value,
       date,
+      moment: momentDate,
       done: false,
     });
     incrementNextId(); // nextId 하나 증가
