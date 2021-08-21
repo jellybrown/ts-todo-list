@@ -110,8 +110,8 @@ const PickerWrap = styled.div`
 `;
 
 interface TextWrapProps {
-  inputWidth: number | null;
-  showUnderLine: boolean;
+  inputWidth: Readonly<number | null>;
+  showUnderLine: Readonly<boolean>;
 }
 
 const TextWrap = styled.div<TextWrapProps>`

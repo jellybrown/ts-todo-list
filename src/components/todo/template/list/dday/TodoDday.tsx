@@ -30,11 +30,6 @@ interface TodoDdayProps {
 }
 
 const TodoDday = ({ done, today, targetDay }: TodoDdayProps) => {
-  useEffect(() => {
-    console.log(today);
-    console.log(targetDay);
-  }, [today, targetDay]);
-
   const [dDay, setDday] = useState<null | number>(null);
 
   useEffect(() => {
