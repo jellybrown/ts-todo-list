@@ -224,6 +224,7 @@ const TodoItem = ({
             inputWidth={inputWidth}
             disabled={todo.done}
             defaultValue={todoText}
+            spellCheck={false}
             onFocus={() => setShowUnderLine(true)}
             onBlur={() => setShowUnderLine(false)}
             onChange={(e) => handleChangeInput(e)}
